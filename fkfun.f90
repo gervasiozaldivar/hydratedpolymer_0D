@@ -15,18 +15,6 @@ iter=iter+1
 
 volumefraction(1) = exp(-x) ! water volume fraction is read from kinsol x
 
-! select case (flagreserv)
-
-! case(0)  
-
-! u_HS=0.0
-! u_HS=(8.0*volumefraction(1)-9.0*volumefraction(1)**2.0+3.0*volumefraction(1)**3.0)/(1.0-volumefraction(1))**3.0
-
-! u_vdw(1)=u_vdw
-
-
-! case(1)
-
 do i=2,4
   volumefraction(i)=n(i)*rho_pol*vol ! Volume fraction of beads 2:cl 3:N 4:C
 enddo
@@ -69,15 +57,20 @@ volumefractionwater = volumefractionwater*exp(-u_HS) ! hard spheres interactions
 
 !! calculation of mupol !!
 
-mupol=log(rho_pol*vol)
+mupol=0.0
 
-do i=2,4
-  mupol = mupol + Xu*u_vdw(i) ! van der waals interactions
-  mupol = mupol + n(i)*u_HS ! hard sphere interactions
-enddo
+if (flagreservoir.eq.1) then
 
-mupol = mupol + n(3)*log(1.0-chargefraction)
+  mupol=log(rho_pol*vol)
 
+  do i=2,4
+    mupol = mupol + Xu*u_vdw(i) ! van der waals interactions
+    mupol = mupol + n(i)*u_HS ! hard sphere interactions
+  enddo
+
+  mupol = mupol + n(3)*log(1.0-chargefraction)
+
+endif
 !! kinsol function !!
 
 f = (volumefraction(1)-volumefractionwater)/volumefraction(1)

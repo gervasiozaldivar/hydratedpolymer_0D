@@ -4,7 +4,6 @@ use mfkfun
 use mkinsol
 
 implicit none
-
 integer i, j, counter,counter_max
 ! real*8 z, ztrash
 real*8, allocatable :: x_init
@@ -34,11 +33,27 @@ if (infile.eq.1) then
   infile = 2
 endif
 
+!! Water reservoir calculation !!
+
+flagreservoir=0
+iter=0
+chargefraction=0.
+
+print*,"Solving water reservoir (rho_pol=0)"
+rho_pol = 0.
+call call_kinsol(x_init)
+call free_energy
+
+print*,"Water reservoir solved"
+
+flagreservoir=1
+
+!! Rho_pol sweep !!
+
 
 rho_pol = rhopol_min
 counter = 0
 counter_max = int( (rhopol_max - rhopol_min)/rhopol_step )
-
 
 
 open(unit=2000,file='mupol.dat')
@@ -78,8 +93,7 @@ do while (counter.le.counter_max)
 
   rho_pol=rho_pol+rhopol_step
   
-  print*,"n is ", n(1),n(2),n(3),n(4)
-    
+   
 enddo
 
 
