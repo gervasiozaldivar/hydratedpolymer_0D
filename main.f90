@@ -64,11 +64,11 @@ open(unit=4000,file='system.dat')
 write(4000,*)"rhopol_min   rhopol_max      rhopol_step"
 write(4000,*)rhopol_max,rhopol_max,rhopol_step
 write(4000,*)"Interaction parameters"
-write(4000,*),st
+write(4000,*)st
 write(4000,*)"vol = ", vol
 write(4000,*)"lseg = ", lseg
 write(4000,*)"Number of beads (W,Cl,N,CH2) = ", n
-write(4000,*),"Kas = ",Kas
+write(4000,*)"Kas = ",Kas
 
 
 do while (counter.le.counter_max)
