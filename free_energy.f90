@@ -26,6 +26,7 @@ if (flagreservoir.eq.1) then
   open(unit=307,file='F_chem.dat')
   open(unit=308,file='F_tot.dat')
   open(unit=309,file='F_tot2.dat')
+  open(unit=310,file='F_tot_noreservoir.dat') ! total semi-grand canonical potential per molecule
 
   do i=1,4
   do j=1,4
@@ -35,6 +36,7 @@ if (flagreservoir.eq.1) then
 
   enddo
   enddo
+
 endif
 
 
@@ -171,7 +173,8 @@ else
   write(307,*)rho_pol,F_chem/rho_pol
   write(308,*)rho_pol,F_1/rho_pol 
   write(309,*)rho_pol,F_2/rho_pol
- 
+  write(310,*)rho_pol,(F_1+F_reservoir)/rho_pol
+
   do i = 1,4
   do j = 1,4
     write(10000*i+j,*)rho_pol,F_vdw(i,j)/rho_pol
