@@ -60,6 +60,12 @@ LFLAGS = -lm  -L/home/ychen97/kinsol/lib  -lsundials_fkinsol -lsundials_kinsol -
 endif
 endif 
 
+ifeq ($(USER), ges)	
+ifeq ($(HOST),midway3-login4.rcc.local) 
+LFLAGS = -lm  -L/home/ges/fortran-MT/lib  -lsundials_fkinsol -lsundials_kinsol -lsundials_fnvecserial -lsundials_nvecserial ${LIBS} -Wl,-rpath,/usr/local/lib
+endif
+endif 
+
 ifeq ($(HOST),PME-0319) 
 LFLAGS = -lm /usr/lib/x86_64-linux-gnu/librt.so.1  -L/usr/local/lib  -lsundials_fkinsol -lsundials_kinsol -lsundials_fnvecserial -lsundials_nvecserial ${LIBS} -Wl,-rpath,/usr/local/lib
 endif
