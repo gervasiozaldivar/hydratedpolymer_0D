@@ -56,13 +56,13 @@ endif
 
 ifeq ($(USER), ychen97)	
 ifeq ($(HOST),midway3-login4.rcc.local) 
-LFLAGS = -lm  -L/home/ychen97/kinsol/lib  -lsundials_fkinsol -lsundials_kinsol -lsundials_fnvecserial -lsundials_nvecserial ${LIBS} -Wl,-rpath,/usr/local/lib
+LFLAGS = -lm  -L/home/ychen97/kinsol/lib  -lsundials_fkinsol -lsundials_kinsol -lsundials_fnvecserial -lsundials_nvecserial ${LIBS} -Wl,-rpath,/home/ychen97/kinsol/lib
 endif
 endif 
 
 ifeq ($(USER), ges)	
 ifeq ($(HOST),midway3-login4.rcc.local) 
-LFLAGS = -lm  -L/home/ges/fortran-MT/lib  -lsundials_fkinsol -lsundials_kinsol -lsundials_fnvecserial -lsundials_nvecserial ${LIBS} -Wl,-rpath,/usr/local/lib
+LFLAGS = -lm  -L/home/ges/fortran-MT/lib  -lsundials_fkinsol -lsundials_kinsol -lsundials_fnvecserial -lsundials_nvecserial ${LIBS} -Wl,-rpath,/home/ges/fortran-MT/lib
 endif
 endif 
 
