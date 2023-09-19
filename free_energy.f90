@@ -27,6 +27,7 @@ if (flagreservoir.eq.1) then
   open(unit=308,file='F_tot.dat')
   open(unit=309,file='F_tot2.dat')
   open(unit=310,file='F_tot_noreservoir.dat') ! total semi-grand canonical potential per molecule
+  open(unit=311,file='F_reservoir.dat') ! canonical potential density of water reservoir (-pressure)
 
   do i=1,4
   do j=1,4
@@ -59,6 +60,7 @@ if (flagreservoir.eq.0) then
   F_vdw_reservoir=0.0
   F_HS_reservoir=0.0
   Nmuwater_reservoir=0.0
+  rhosol_reservoir=volumefraction(1)/vol
 endif
 
 !! F_mix !!
@@ -77,7 +79,6 @@ if (flagreservoir.eq.0)F_mix_reservoir=F_mixs
 ! print*,"F_mix is",F_mix/rho_pol
 
 !! F_vdw !!
-
 
 do i=1,4
 do j=1,4
@@ -164,20 +165,21 @@ else
 
   !! write to files !!
 
-  write(301,*)rho_pol,F_mix/rho_pol
-  write(302,*)rho_pol,F_mixs/rho_pol
-  write(303,*)rho_pol,F_mixpol/rho_pol
-  write(304,*)rho_pol,F_mixCl/rho_pol
-  write(305,*)rho_pol,FvdW_tot/rho_pol
-  write(306,*)rho_pol,F_HS/rho_pol
-  write(307,*)rho_pol,F_chem/rho_pol
-  write(308,*)rho_pol,F_1/rho_pol 
-  write(309,*)rho_pol,F_2/rho_pol
-  write(310,*)rho_pol,(F_1+F_reservoir)/rho_pol
+  write(301,*)rho_pol,muwater,F_mix/rho_pol
+  write(302,*)rho_pol,muwater,F_mixs/rho_pol
+  write(303,*)rho_pol,muwater,F_mixpol/rho_pol
+  write(304,*)rho_pol,muwater,F_mixCl/rho_pol
+  write(305,*)rho_pol,muwater,FvdW_tot/rho_pol
+  write(306,*)rho_pol,muwater,F_HS/rho_pol
+  write(307,*)rho_pol,muwater,F_chem/rho_pol
+  write(308,*)rho_pol,muwater,F_1/rho_pol 
+  write(309,*)rho_pol,muwater,F_2/rho_pol
+  write(310,*)rho_pol,muwater,(F_1+F_reservoir)/rho_pol
+  write(311,*)rho_pol,rhosol_reservoir,F_reservoir
 
   do i = 1,4
   do j = 1,4
-    write(10000*i+j,*)rho_pol,F_vdw(i,j)/rho_pol
+    write(10000*i+j,*)rho_pol,muwater,F_vdw(i,j)/rho_pol
   enddo
   enddo
 

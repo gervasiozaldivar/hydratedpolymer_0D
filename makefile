@@ -27,6 +27,9 @@ ifeq ($(HOST),mdq)
 LFLAGS = -lm /usr/lib/x86_64-linux-gnu/librt.so  -L/usr/local/lib  -lsundials_fkinsol -lsundials_kinsol -lsundials_fnvecserial -lsundials_nvecserial ${LIBS} -Wl,-rpath,/usr/local/lib
 endif
 
+ifeq ($(HOST),spinetta)
+LFLAGS = -lm /usr/lib/x86_64-linux-gnu/librt.so  -L/usr/local/lib  -lsundials_fkinsol -lsundials_kinsol -lsundials_fnvecserial -lsundials_nvecserial ${LIBS} -Wl,-rpath,/usr/local/lib
+endif
 
 ifeq ($(HOST),login.crane.hcc.unl.edu)
 ifeq ($(USER),gzaldivar)
