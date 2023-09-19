@@ -17,7 +17,7 @@ real*8 chargefraction, Kas ! Association equilibrium parameters
 real*8 mupol, muwater, muwater_min, muwater_max, muwater_step ! chemical potential of water and polymer
 real*8, parameter :: NA=6.02d23, Eps=0.114, Beta=1 ! Constants. Eps in units of  e^2/kT.nm
 integer*8 iter, infile
-integer flagreservoir 
+integer flagreservoir, flag_muwater 
 endmodule mfkfun
 
 module Reservoir

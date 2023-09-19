@@ -4,7 +4,7 @@ use mfkfun
 use mkinsol
 
 implicit none
-integer i, j, counter,counter_max,mucounter,mucounter_max
+integer i, j, counter,counter_max,mucounter,mucounter_min
 ! real*8 z, ztrash
 real*8, allocatable :: x_init
 ! character*22, volfractionfilename
@@ -36,16 +36,14 @@ if (infile.eq.1) then
   infile = 2
 endif
 
-muwater = muwater_min
+muwater = muwater_max
 
-mucounter_max = int((muwater_max - muwater_min)/muwater_step)
-mucounter = 0
+mucounter = int((muwater_max - muwater_min)/muwater_step)
+mucounter_min = 0
 
-do while (mucounter.le.mucounter_max)
+do while (mucounter.ge.mucounter_min)
 
-mucounter=mucounter+1
-
-
+mucounter=mucounter-1
 
 !! Water reservoir calculation !!
 
@@ -53,7 +51,7 @@ flagreservoir=0
 iter=0
 chargefraction=0.
 
-print*,"Solving water reservoir (rho_pol=0)"
+print*,"Solving water reservoir for muwater = ", muwater
 
 rho_pol = 0.
 
@@ -91,30 +89,36 @@ write(4000+mucounter,*)"lseg = ", lseg
 write(4000+mucounter,*)"Number of beads (W,Cl,N,CH2) = ", n
 write(4000+mucounter,*)"Kas = ",Kas
 
+print*,"flag mu water is ",flag_muwater
 
-do while (counter.le.counter_max)
+if (flag_muwater.ne.1) then
 
-  iter=0
-  counter=counter+1
+  do while (counter.le.counter_max)
+
+    iter=0
+    counter=counter+1
   
-  print*, "Solving rho_pol = ",rho_pol
+    print*, "Solving rho_pol = ",rho_pol
 
-  chargefraction = (1+4*n(3)*rho_pol*vol*Kas)**0.5-1
-  chargefraction = chargefraction/(2*n(3)*rho_pol*vol*Kas)
+    chargefraction = (1+4*n(3)*rho_pol*vol*Kas)**0.5-1
+    chargefraction = chargefraction/(2*n(3)*rho_pol*vol*Kas)
 
-  call call_kinsol(x_init)
+    call call_kinsol(x_init)
 
-  write(1000+mucounter,*)rho_pol, volumefraction(1), volumefraction(2), volumefraction(3), volumefraction(4), volumefraction_total
-  write(2000+mucounter,*)rho_pol, mupol
-  write(3000+mucounter,*)rho_pol, chargefraction
+    write(1000+mucounter,*)rho_pol, volumefraction(1), volumefraction(2), volumefraction(3), volumefraction(4), volumefraction_total
+    write(2000+mucounter,*)rho_pol, mupol
+    write(3000+mucounter,*)rho_pol, chargefraction
 
-  x_init = -log(volumefraction(1))
+    x_init = -log(volumefraction(1))
 
-  call free_energy
+    call free_energy
 
-  rho_pol = rho_pol + rhopol_step
+    rho_pol = rho_pol + rhopol_step
    
-enddo ! rhopol sweep
+  enddo ! rhopol sweep
+
+endif
+
 
 close(1000+mucounter)
 close(2000+mucounter)
@@ -122,7 +126,7 @@ close(3000+mucounter)
 close(4000+mucounter)
 
 
-muwater = muwater + muwater_step
+muwater = muwater - muwater_step
 
 enddo ! muwater sweep
 

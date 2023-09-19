@@ -175,7 +175,7 @@ else
   write(308,*)rho_pol,muwater,F_1/rho_pol 
   write(309,*)rho_pol,muwater,F_2/rho_pol
   write(310,*)rho_pol,muwater,(F_1+F_reservoir)/rho_pol
-  write(311,*)rho_pol,rhosol_reservoir,F_reservoir
+  write(311,*)rho_pol,muwater,rhosol_reservoir,F_reservoir
 
   do i = 1,4
   do j = 1,4
