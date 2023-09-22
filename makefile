@@ -109,8 +109,8 @@ ifeq ($(HOST),quser10)
 LFLAGS = -L/home/mta183/KINSOL2.7/lib -lsundials_fkinsol -lsundials_kinsol -lsundials_fnvecserial -lsundials_nvecserial -lm -L/usr/lib/gcc/x86_64-redhat-linux/4.1.2 -L/usr/lib/gcc/x86_64-redhat-linux/4.1.2/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -lgfortranbegin -lgfortran -lm
 endif
 
-## GIT_VERSION := $(shell git describe --abbrev=6 --dirty --always --tags)
-##GFLAGS=-cpp -D_VERSION=\"$(GIT_VERSION)\"
+GIT_VERSION := $(shell git describe --abbrev=6 --dirty --always --tags)
+GFLAGS=-cpp -D_VERSION=\"$(GIT_VERSION)\"
 
 FF = gfortran #${F90}
 VER = ~/bin/hydratedpolymer_0D
@@ -122,7 +122,7 @@ $(TARGET): $(SRC:.f90=.o)
 	cp $(TARGET) $(VER)
 
 $(SRC:.f90=.o): $(SRC)
-	${FF} -c ${FFLAGS}  $(SRC) $(LFLAGS) ### $(GFLAGS) 
+	${FF} -c ${FFLAGS}  $(SRC) $(LFLAGS) $(GFLAGS) 
 
 install: all
 	cp $(TARGET) $(VER)

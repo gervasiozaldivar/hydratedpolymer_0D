@@ -142,7 +142,7 @@ F_2 = F_2 + rho_pol*mupol
 
 !! interactions !!
 
-F_2 = F_2 - Fvdw_tot
+F_2 = F_2 - (Fvdw_tot + F_vdw_reservoir)
 
 ! print*,"After vdw, F2 is ",F_2/rho_pol
 

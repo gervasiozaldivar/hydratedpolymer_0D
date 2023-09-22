@@ -2,8 +2,10 @@ subroutine readinput
 
 use mfkfun
 
-character nada
+implicit none
 
+character nada
+integer i,j
 
 read(8,*) nada
 read(8,*) rhopol_min, rhopol_max, rhopol_step
@@ -34,9 +36,6 @@ read(8,*) infile
 
 read(8,*) nada
 read(8,*) bla ! initial guess for water volume fraction
-
-read(8,*) nada
-read(8,*) flag_muwater
 
 
 open(file="epsilon.in",unit=10)

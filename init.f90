@@ -1,6 +1,10 @@
 subroutine init
 
 use mfkfun
+
+print*,"Program: Hydratedpolymer_0D"
+print*,"GIT Version: ",_VERSION
+
 n(1) = 1
 n(2) = n(3) ! number of Cl- equal to N+
 

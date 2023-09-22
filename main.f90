@@ -4,7 +4,7 @@ use mfkfun
 use mkinsol
 
 implicit none
-integer i, j, counter,counter_max,mucounter,mucounter_min
+integer i, j, counter,counter_max,mucounter,mucounter_max
 ! real*8 z, ztrash
 real*8, allocatable :: x_init
 ! character*22, volfractionfilename
@@ -36,62 +36,60 @@ if (infile.eq.1) then
   infile = 2
 endif
 
-muwater = muwater_max
+muwater = muwater_min
 
-mucounter = int((muwater_max - muwater_min)/muwater_step)
-mucounter_min = 0
+mucounter_max = int((muwater_max - muwater_min)/muwater_step)
+mucounter = 0
 
-do while (mucounter.ge.mucounter_min)
+do while (mucounter.le.mucounter_max)
 
-mucounter=mucounter-1
+  mucounter=mucounter+1
 
-!! Water reservoir calculation !!
+  !! Water reservoir calculation !!
 
-flagreservoir=0
-iter=0
-chargefraction=0.
+  flagreservoir=0
+  iter=0
+  chargefraction=0.
 
-print*,"Solving water reservoir for muwater = ", muwater
+  print*,"Solving water reservoir for muwater = ", muwater
 
-rho_pol = 0.
+  rho_pol = 0.
 
-call call_kinsol(x_init)
-call free_energy
+  call call_kinsol(x_init)
+  call free_energy
 
-print*,"Water reservoir solved"
+  print*,"Water reservoir solved"
 
-flagreservoir=1
+  flagreservoir=1
 
-!! Rho_pol sweep !!
+  !! Rho_pol sweep !!
 
-write(mupolfilename,'(A6,BZ,I3.3,A4)')'mupol.',mucounter,'.dat'
-write(volfractionfilename,'(A12,BZ,I3.3,A4)')'volfraction.',mucounter,'.dat'
-write(fractionNplusfilename,'(A14,BZ,I3.3,A4)')'fractionNplus.',mucounter,'.dat'
-write(systemfilename,'(A7,BZ,I3.3,A4)')'system.',mucounter,'.dat'
+  write(mupolfilename,'(A6,BZ,I3.3,A4)')'mupol.',mucounter,'.dat'
+  write(volfractionfilename,'(A12,BZ,I3.3,A4)')'volfraction.',mucounter,'.dat'
+  write(fractionNplusfilename,'(A14,BZ,I3.3,A4)')'fractionNplus.',mucounter,'.dat'
+  write(systemfilename,'(A7,BZ,I3.3,A4)')'system.',mucounter,'.dat'
 
-open(unit=1000+mucounter,file=volfractionfilename)
-open(unit=2000+mucounter,file=mupolfilename)
-open(unit=3000+mucounter,file=fractionNplusfilename)
-open(unit=4000+mucounter,file=systemfilename)
+  open(unit=1000+mucounter,file=volfractionfilename)
+  open(unit=2000+mucounter,file=mupolfilename)
+  open(unit=3000+mucounter,file=fractionNplusfilename)
+  open(unit=4000+mucounter,file=systemfilename)
 
-rho_pol = rhopol_min
+  rho_pol = rhopol_min
 
-counter = 0
+  counter = 0
 
-counter_max = int( (rhopol_max - rhopol_min)/rhopol_step )
+  counter_max = int( (rhopol_max - rhopol_min)/rhopol_step )
 
-write(4000+mucounter,*)"rhopol_min   rhopol_max      rhopol_step"
-write(4000+mucounter,*)rhopol_max,rhopol_max,rhopol_step
-write(4000+mucounter,*)"interaction parameters"
-write(4000+mucounter,*)st
-write(4000+mucounter,*)"vol = ", vol
-write(4000+mucounter,*)"lseg = ", lseg
-write(4000+mucounter,*)"Number of beads (W,Cl,N,CH2) = ", n
-write(4000+mucounter,*)"Kas = ",Kas
-
-print*,"flag mu water is ",flag_muwater
-
-if (flag_muwater.ne.1) then
+  write(4000+mucounter,*)"GIT Version is ", _VERSION
+  write(4000+mucounter,*)"muwater = ",muwater
+  write(4000+mucounter,*)"rhopol_min   rhopol_max      rhopol_step"
+  write(4000+mucounter,*)rhopol_max,rhopol_max,rhopol_step
+  write(4000+mucounter,*)"interaction parameters"
+  write(4000+mucounter,*)st
+  write(4000+mucounter,*)"vol = ", vol
+  write(4000+mucounter,*)"lseg = ", lseg
+  write(4000+mucounter,*)"Number of beads (W,Cl,N,CH2) = ", n
+  write(4000+mucounter,*)"Kas = ",Kas
 
   do while (counter.le.counter_max)
 
@@ -117,16 +115,13 @@ if (flag_muwater.ne.1) then
    
   enddo ! rhopol sweep
 
-endif
+  close(1000+mucounter)
+  close(2000+mucounter)
+  close(3000+mucounter)
+  close(4000+mucounter)
 
 
-close(1000+mucounter)
-close(2000+mucounter)
-close(3000+mucounter)
-close(4000+mucounter)
-
-
-muwater = muwater - muwater_step
+  muwater = muwater - muwater_step
 
 enddo ! muwater sweep
 
