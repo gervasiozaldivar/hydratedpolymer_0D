@@ -15,13 +15,13 @@ iter=iter+1
 
 volumefraction(1) = exp(-x) ! water volume fraction is read from kinsol x
 
-do i=2,4
+do i=2,2+Npoorsv
   volumefraction(i)=n(i)*rho_pol*vol ! Volume fraction of beads 2:cl 3:N 4:C
 enddo
 
 volumefraction_total=0.0
 
-do i=1,4
+do i=1,2+Npoorsv
   volumefraction_total = volumefraction_total + volumefraction(i)  ! total volume fraction of beads
 enddo
 
@@ -37,7 +37,7 @@ u_HS=(8.0*volumefraction_total-9.0*volumefraction_total**2.0+3.0*volumefraction_
 
 u_vdW(:)=0.0
 
-do i=1,4
+do i=1,2+Npoorsv
 
   do j=1,4
     u_vdW(i)=u_vdw(i)+st(i,j)*volumefraction(j)

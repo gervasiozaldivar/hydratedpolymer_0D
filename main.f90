@@ -54,7 +54,7 @@ do while (mucounter.le.mucounter_max)
   print*,"Solving water reservoir for muwater = ", muwater,". Initial guess is ",inputwater
 
   rho_pol = 0.
-  n(2:4)=0.
+  n(2:2+Npoorsv)=0.
 
   x_init=-log(inputwater)
 
@@ -91,7 +91,12 @@ do while (mucounter.le.mucounter_max)
   rho_pol = rhopol_min
   n(2)=nion
   n(3)=nion
-  n(4)=ntail 
+  n(4)=ntail
+
+  do i=5,Npoorsv+2 
+    n(i)=n_read(i)
+  enddo
+
   counter = 0
 
   counter_max = int( (rhopol_max - rhopol_min)/rhopol_step )
@@ -145,8 +150,8 @@ do i=1,11
   close(300+i)
 enddo
 
-do i=1,4
-do j=1,4
+do i=1,2+Npoorsv
+do j=1,2+Npoorsv
   close(10000*i+j)
 enddo
 enddo 

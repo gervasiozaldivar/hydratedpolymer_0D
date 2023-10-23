@@ -11,7 +11,16 @@ read(8,*) nada
 read(8,*) rhopol_min, rhopol_max, rhopol_step
 
 read(8,*) nada
-read(8,*) nion,ntail
+read(8,*) Npoorsv
+
+allocate(st(2+Npoorsv,2+Npoorsv),n(2+Npoorsv),n_read(2+Npoorsv),volumefraction(2+Npoorsv))
+
+read(8,*) nada
+read(8,*) nion
+read(8,*) ntail
+do i=3,Npoorsv
+  read(8,*) n_read(i+2)
+enddo
 
 read(8,*) nada
 read(8,*) vol
@@ -44,7 +53,7 @@ read(8,*) bla ! initial guess for water volume fraction
 
 open(file="epsilon.in",unit=10)
 
-do i = 1,4
+do i = 1,2+Npoorsv
 read(10,*)(st(i,j), j = 1, i)
  do j = 1, i
     st(j,i) = st(i,j)
