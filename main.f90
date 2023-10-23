@@ -26,15 +26,15 @@ allocate(pp(neq))
 
 ! call kai
 
-x_init = 0.1 ! water volume fraction initial guess
+! x_init = 0.1 ! water volume fraction initial guess
 
-if (infile.eq.1) then
+! if (infile.eq.1) then
 !  do i=1,ntot
 !   read(8,*), bla
-   x_init = -dlog(bla)
+!   x_init = -dlog(bla)
 !  enddo
-  infile = 2
-endif
+!  infile = 2
+!endif
 
 muwater = muwater_min
 
@@ -51,9 +51,12 @@ do while (mucounter.le.mucounter_max)
   iter=0
   chargefraction=0.
 
-  print*,"Solving water reservoir for muwater = ", muwater
+  print*,"Solving water reservoir for muwater = ", muwater,". Initial guess is ",inputwater
 
   rho_pol = 0.
+  n(2:4)=0.
+
+  x_init=-log(inputwater)
 
   call call_kinsol(x_init)
   call free_energy
@@ -61,6 +64,17 @@ do while (mucounter.le.mucounter_max)
   print*,"Water reservoir solved"
 
   flagreservoir=1
+
+  x_init = 0.1 ! water volume fraction initial guess
+
+  if (infile.eq.1) then
+  !  do i=1,ntot
+  !   read(8,*), bla
+     x_init = -dlog(bla)
+  !  enddo
+    infile = 2
+  endif
+
 
   !! Rho_pol sweep !!
 
@@ -75,7 +89,9 @@ do while (mucounter.le.mucounter_max)
   open(unit=4000+mucounter,file=systemfilename)
 
   rho_pol = rhopol_min
-
+  n(2)=nion
+  n(3)=nion
+  n(4)=ntail 
   counter = 0
 
   counter_max = int( (rhopol_max - rhopol_min)/rhopol_step )

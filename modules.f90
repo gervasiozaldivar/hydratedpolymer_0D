@@ -9,10 +9,10 @@ module mfkfun
 implicit none
 real*8 vol,st(4,4),lseg ! molecularproperties
 integer*8 Xulimit ! vdw integration
-integer*8 n(4)
+integer*8 n(4),ntail,nion
 real*8 Xu
 real*8 rhopol_min, rhopol_max, rhopol_step, rho_pol  ! screening of number density of polymer 
-real*8 volumefraction(4), volumefraction_total, freeClvolumefraction, bla ! volume fraction of beads
+real*8 volumefraction(4), volumefraction_total, freeClvolumefraction, bla,inputwater ! volume fraction of beads
 real*8 chargefraction, Kas ! Association equilibrium parameters
 real*8 mupol, muwater, muwater_min, muwater_max, muwater_step ! chemical potential of water and polymer
 real*8, parameter :: NA=6.02d23, Eps=0.114, Beta=1 ! Constants. Eps in units of  e^2/kT.nm

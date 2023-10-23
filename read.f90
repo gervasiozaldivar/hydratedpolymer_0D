@@ -11,7 +11,7 @@ read(8,*) nada
 read(8,*) rhopol_min, rhopol_max, rhopol_step
 
 read(8,*) nada
-read(8,*) n(3),n(4)
+read(8,*) nion,ntail
 
 read(8,*) nada
 read(8,*) vol
@@ -33,6 +33,10 @@ read(8,*) infile
 
 ! read(8,*), nada
 ! read(8,*), Xulimit 
+
+read(8,*) nada
+read(8,*) inputwater
+
 
 read(8,*) nada
 read(8,*) bla ! initial guess for water volume fraction
