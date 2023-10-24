@@ -55,7 +55,7 @@ do while (mucounter.le.mucounter_max)
 
   rho_pol = 0.
   n(2:2+Npoorsv)=0.
-
+  print*,n
   x_init=-log(inputwater)
 
   call call_kinsol(x_init)
@@ -96,7 +96,7 @@ do while (mucounter.le.mucounter_max)
   do i=5,Npoorsv+2 
     n(i)=n_read(i)
   enddo
-
+  print*,n
   counter = 0
 
   counter_max = int( (rhopol_max - rhopol_min)/rhopol_step )

@@ -7,7 +7,7 @@ implicit none
 integer*8 j,i !indices
 integer ier
 real*8 f, x      ! x(1:ntot)=volumefraction(i)  
-real*8 u_HS, u_vdw(4)
+real*8 u_HS, u_vdw(Npoorsv+2)
 real*8 volumefractionwater
 real*8 algo 
 
@@ -39,7 +39,7 @@ u_vdW(:)=0.0
 
 do i=1,2+Npoorsv
 
-  do j=1,4
+  do j=1,2+Npoorsv
     u_vdW(i)=u_vdw(i)+st(i,j)*volumefraction(j)
   enddo
 
@@ -63,7 +63,7 @@ if (flagreservoir.eq.1) then
 
   mupol=log(rho_pol*vol)
 
-  do i=2,4
+  do i=2,2+Npoorsv
     mupol = mupol + Xu*u_vdw(i) ! van der waals interactions
     mupol = mupol + n(i)*u_HS ! hard sphere interactions
   enddo

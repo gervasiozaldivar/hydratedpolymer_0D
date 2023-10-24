@@ -10,8 +10,8 @@ real*8 F_1, F_2
 real*8 F_mixs, F_mixpol, F_mixCl, F_mix
 real*8 F_HS
 real*8 F_chem
-real*8 F_vdw(4,4),Fvdw_tot
-character*17 Fvdw_filename(4,4)
+real*8 F_vdw(2+Npoorsv,Npoorsv+2),Fvdw_tot
+character*17 Fvdw_filename(2+Npoorsv,2+Npoorsv)
 
 
 print*,"Starting Free Energy calculation:"
