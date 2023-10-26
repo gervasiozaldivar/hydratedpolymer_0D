@@ -35,6 +35,9 @@ read(8,*) nada
 read(8,*) Kas 
 
 read(8,*) nada
+read(8,*) perm_pol
+
+read(8,*) nada
 read(8,*) infile
 
 ! read(8,*), nada
@@ -48,8 +51,8 @@ read(8,*) inputwater
 
 
 read(8,*) nada
-read(8,*) bla ! initial guess for water volume fraction
-
+read(8,*) bla(1) ! initial guess for water volume fraction
+read(8,*) bla(2) ! initial guess for charge fraction
 
 open(file="epsilon.in",unit=10)
 

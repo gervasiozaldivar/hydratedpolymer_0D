@@ -6,7 +6,7 @@ use mkinsol
 implicit none
 integer i, j, counter,counter_max,mucounter,mucounter_max
 ! real*8 z, ztrash
-real*8, allocatable :: x_init
+real*8, allocatable :: x_init(:)
 ! character*22, volfractionfilename
 ! character*13, mupolfilename
 character*13, mupolfilename
@@ -16,11 +16,12 @@ character*14, systemfilename
 
 call readinput
 call init
-neq = 1 
+neq = 2
 
 
 ! call allocation
 allocate(pp(neq))
+allocate(x_init(neq))
 
 ! print*,"kai calculation"
 
@@ -49,14 +50,15 @@ do while (mucounter.le.mucounter_max)
 
   flagreservoir=0
   iter=0
-  chargefraction=0.
+!  chargefraction=0.
 
   print*,"Solving water reservoir for muwater = ", muwater,". Initial guess is ",inputwater
 
   rho_pol = 0.
   n(2:2+Npoorsv)=0.
-  print*,n
-  x_init=-log(inputwater)
+  
+  x_init(1)=-log(inputwater) ! water volume fraction initial guess 
+  x_init(2)=1e-5 ! charge fraction
 
   call call_kinsol(x_init)
   call free_energy
@@ -65,12 +67,14 @@ do while (mucounter.le.mucounter_max)
 
   flagreservoir=1
 
-  x_init = 0.1 ! water volume fraction initial guess
+  x_init(1) = 0.1 ! default water volume fraction initial guess
+  x_init(2) = 1e-5 ! default charge fraction initial guess
 
   if (infile.eq.1) then
   !  do i=1,ntot
   !   read(8,*), bla
-     x_init = -dlog(bla)
+     x_init(1) = -dlog(bla(1)) ! water volume fraction initial guess read from file
+     x_init(2) = bla(2)
   !  enddo
     infile = 2
   endif
@@ -96,7 +100,7 @@ do while (mucounter.le.mucounter_max)
   do i=5,Npoorsv+2 
     n(i)=n_read(i)
   enddo
-  print*,n
+  
   counter = 0
 
   counter_max = int( (rhopol_max - rhopol_min)/rhopol_step )
@@ -119,8 +123,8 @@ do while (mucounter.le.mucounter_max)
   
     print*, "Solving rho_pol = ",rho_pol
 
-    chargefraction = (1+4*n(3)*rho_pol*vol*Kas)**0.5-1
-    chargefraction = chargefraction/(2*n(3)*rho_pol*vol*Kas)
+    ! chargefraction = (1+4*n(3)*rho_pol*vol*Kas)**0.5-1 ! charge fraction initial guess
+    ! chargefraction = chargefraction/(2*n(3)*rho_pol*vol*Kas) ! charge fraction initial guess
 
     call call_kinsol(x_init)
 
@@ -128,7 +132,8 @@ do while (mucounter.le.mucounter_max)
     write(2000+mucounter,*)rho_pol, mupol
     write(3000+mucounter,*)rho_pol, chargefraction
 
-    x_init = -log(volumefraction(1))
+    x_init(1) = -log(volumefraction(1))
+    x_init(2) = chargefraction
 
     call free_energy
 

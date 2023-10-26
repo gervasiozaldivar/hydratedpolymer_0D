@@ -10,7 +10,7 @@ subroutine call_kinsol(x_in)
       double precision rout(2)
       real*8, allocatable :: xg(:), scale(:), constr(:)
       integer h
-      real*8 x_in(1)
+      real*8 x_in(2)
 
       !ntot = 10
       !neq = ntot
@@ -147,7 +147,7 @@ subroutine call_kinsol(x_in)
       write(6,1246)
  1246 format(//' The resultant values of xg are:'/)
 
-      do 30 i = 1, neq, 4
+      do 30 i = 1, neq
          write(6,1256) i, xg(i) !, xg(i+1), xg(i+2), xg(i+3)
  1256    format(i4, 4(1x, f10.6))
  30   continue
