@@ -68,7 +68,7 @@ u_self = u_self*chargefraction*volumefraction(2)/volumefraction_total/perm
 volumefractionwater = exp(muwater) ! chemical potential
 volumefractionwater = volumefractionwater*exp(-Xu*u_vdw(1)) ! van der waals interactions
 volumefractionwater = volumefractionwater*exp(-u_HS) ! hard spheres interactions
-volumefractionwater = volumefractionwater*exp(u_self*(perm_water/perm-1.))
+volumefractionwater = volumefractionwater*exp(-u_self*(perm_water/perm-1.))
 
 !! calculation of mupol !!
 

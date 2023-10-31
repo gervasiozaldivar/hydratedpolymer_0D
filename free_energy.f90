@@ -11,6 +11,7 @@ real*8 F_mixs, F_mixpol, F_mixCl, F_mix
 real*8 F_HS
 real*8 F_chem
 real*8 F_vdw(2+Npoorsv,Npoorsv+2),Fvdw_tot
+real*8 F_born
 character*17 Fvdw_filename(2+Npoorsv,2+Npoorsv)
 
 
@@ -28,6 +29,7 @@ if (flagreservoir.eq.1) then
   open(unit=309,file='F_tot2.dat')
   open(unit=310,file='F_tot_noreservoir.dat') ! total semi-grand canonical potential per molecule
   open(unit=311,file='F_reservoir.dat') ! canonical potential density of water reservoir (-pressure)
+  open(unit=312,file='F_born.dat')
 
   do i=1,2+Npoorsv
   do j=1,2+Npoorsv
@@ -53,6 +55,7 @@ F_vdw(:,:) = 0.0
 Fvdw_tot = 0.0
 F_HS = 0.0
 F_chem = 0.0
+F_born = 0.0
 
 if (flagreservoir.eq.0) then
   F_reservoir=0.0
@@ -60,6 +63,7 @@ if (flagreservoir.eq.0) then
   F_vdw_reservoir=0.0
   F_HS_reservoir=0.0
   Nmuwater_reservoir=0.0
+  Fborn_reservoir=0.0
   rhosol_reservoir=volumefraction(1)/vol
 endif
 
@@ -109,16 +113,19 @@ if (flagreservoir.eq.1) then
   F_chem = volumefraction(3)/vol*(chargefraction*log(chargefraction)+(1.-chargefraction)*log(1.-chargefraction))
   F_chem = F_chem + volumefraction(3)/vol*chargefraction*log(Kas)
 endif
-! print*,"F_chem is ", F_chem/rho_pol
 
-F_1 = F_mix + F_HS + Fvdw_tot + F_chem - muwater*volumefraction(1)/vol
+if (flagreservoir.eq.0)Nmuwater_reservoir=muwater*volumefraction(1)/vol
+
+!! F_born !!
+
+F_born = 2.0*chargefraction*n(3)*rho_pol*u_born*(1./perm-1./perm_water)
+F_born = F_born - Fborn_reservoir
+
+
+
+F_1 = F_mix + F_HS + Fvdw_tot + F_chem - muwater*volumefraction(1)/vol +F_born
 
 F_1 = F_1 + Nmuwater_reservoir
-! print*,"muwater contribution is ",-muwater*volumefraction(1)/vol/rho_pol
-
-if (flagreservoir.eq.0) then
-  Nmuwater_reservoir=muwater*volumefraction(1)/vol
-endif
 
    !!!!!!!!!!!!!!!!!!!
 !!!!! Free energy 2 !!!!!
@@ -146,6 +153,10 @@ F_2 = F_2 - (Fvdw_tot + F_vdw_reservoir)
 
 ! print*,"After vdw, F2 is ",F_2/rho_pol
 
+!! born energy !!
+
+F_2 = F_2 + (F_born - Fborn_reservoir)
+
 !! number densities !!
 
 F_2 = F_2 - rho_pol - freeClvolumefraction/vol - volumefraction(1)/vol
@@ -157,7 +168,7 @@ F_2 = F_2 - F_reservoir
 
 if (flagreservoir.eq.0) then
   F_reservoir=F_1
-  print*,"Free Energy of flag reservoir is: ",F_1,F_2,F_vdw_reservoir+F_HS_reservoir+F_mix_reservoir-NMuwater_reservoir
+  print*,"Free Energy of flag reservoir is: ",F_1,F_2,F_vdw_reservoir+F_HS_reservoir+F_mix_reservoir+F_born-NMuwater_reservoir
 else
 
   print*,"Free Energy 1: ",F_1/rho_pol 
@@ -176,6 +187,7 @@ else
   write(309,*)rho_pol,muwater,F_2/rho_pol
   write(310,*)rho_pol,muwater,(F_1+F_reservoir)/rho_pol
   write(311,*)rho_pol,muwater,rhosol_reservoir,F_reservoir
+  write(312,*)rho_pol,muwater,F_born/rho_pol
 
   do i = 1,Npoorsv+2
   do j = 1,Npoorsv+2

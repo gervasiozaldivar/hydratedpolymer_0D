@@ -26,5 +26,5 @@ real*8 u_born, perm_water, perm_pol, perm, u_self ! Born energy variables
 endmodule mfkfun
 
 module Reservoir
-real*8 F_reservoir, F_mix_reservoir, F_vdw_reservoir, F_HS_reservoir, Nmuwater_reservoir,rhosol_reservoir
+real*8 F_reservoir, F_mix_reservoir, F_vdw_reservoir, F_HS_reservoir, Nmuwater_reservoir,rhosol_reservoir, Fborn_reservoir
 endmodule

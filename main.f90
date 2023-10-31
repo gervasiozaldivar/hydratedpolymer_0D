@@ -151,7 +151,7 @@ do while (mucounter.le.mucounter_max)
 
 enddo ! muwater sweep
 
-do i=1,11
+do i=1,12
   close(300+i)
 enddo
 
