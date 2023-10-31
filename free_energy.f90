@@ -111,21 +111,23 @@ if (flagreservoir.eq.0)F_HS_reservoir=F_HS
 
 if (flagreservoir.eq.1) then
   F_chem = volumefraction(3)/vol*(chargefraction*log(chargefraction)+(1.-chargefraction)*log(1.-chargefraction))
-  F_chem = F_chem + volumefraction(3)/vol*chargefraction*log(Kas)
+  F_chem = F_chem + volumefraction(3)/vol*chargefraction*log(Kas_corr)
 endif
 
-if (flagreservoir.eq.0)Nmuwater_reservoir=muwater*volumefraction(1)/vol
 
 !! F_born !!
 
-F_born = 2.0*chargefraction*n(3)*rho_pol*u_born*(1./perm-1./perm_water)
+F_born = 2.0*volumefraction(3)/vol*chargefraction*u_born*(1./perm-1./perm_water)
 F_born = F_born - Fborn_reservoir
 
-
+print*,"F_born reservoir is ", Fborn_reservoir
+print*,"F_born is ", F_born
 
 F_1 = F_mix + F_HS + Fvdw_tot + F_chem - muwater*volumefraction(1)/vol +F_born
 
 F_1 = F_1 + Nmuwater_reservoir
+
+if (flagreservoir.eq.0)Nmuwater_reservoir=muwater*volumefraction(1)/vol
 
    !!!!!!!!!!!!!!!!!!!
 !!!!! Free energy 2 !!!!!
@@ -155,7 +157,7 @@ F_2 = F_2 - (Fvdw_tot + F_vdw_reservoir)
 
 !! born energy !!
 
-F_2 = F_2 + (F_born - Fborn_reservoir)
+F_2 = F_2 + F_born + Fborn_reservoir
 
 !! number densities !!
 
