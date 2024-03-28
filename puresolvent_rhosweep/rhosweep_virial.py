@@ -33,8 +33,7 @@ counter_max=int((rhomax-rhomin)/rhostep)
 stcounter_max=int((stmax-stmin)/ststep)
 chicounter_max=int((chimax-chimin)/chistep)
 
-st=stmin
-chi=chimin
+st = stmin
 
 gtot=-2.0**1.5/3.0*np.pi*lseg**3
 
@@ -44,7 +43,8 @@ p_spinodal=[]
 V_spinodal=[]
 
 for eps in range(0,stcounter_max+1):
-   for chi in range(0,chicounter_max+1):  
+   chi = chimin
+   for chi_counter in range(0,chicounter_max+1):  
        
       logrho=rhomin 
       volfraction=[]
@@ -69,18 +69,18 @@ for eps in range(0,stcounter_max+1):
         rho.append(10.**logrho)
         volfraction.append(nbeads*rho[i]*vol)
         logvolfraction=np.log(volfraction[i]/nbeads)
-        uvdw=nbeads*rho[i]*st*gtot
+        uvdw = nbeads * rho[i] * st * gtot
         uHS = (8.0*volfraction[i]-9.0*volfraction[i]**2.0+3.0*volfraction[i]**3.)/(1.-volfraction[i])**3.
         uchi = chi * (nbeads*rho[i])**2.
         muwater.append(logvolfraction + nbeads*(uvdw + uHS + uchi))
         S_mix.append(rho[i]*(logvolfraction-1.0))
         F_vdw.append(uvdw*nbeads*rho[i]/2.0)
         F_HS.append(nbeads*rho[i]*volfraction[i]*(4.0-3.0*volfraction[i])/(1-volfraction[i])**2.0)
-        F_chi.append(uchi*nbeads*rho[i]/3.0)
+        F_chi.append(uchi * nbeads * rho[i]/3.0)
         F_tot.append(S_mix[i] + F_vdw[i] + F_chi[i] + F_HS[i] - rho[i]*muwater[i])
         pressure.insert(0,-F_tot[i])
         molarvolume.insert(0,1./rho[i])
-        logrho=logrho+rhostep
+        logrho = logrho + rhostep
         if i/10 == i//10:
           molarvolumetoplot.insert(0,1./rho[i])
           pressuretoplot.insert(0,-F_tot[i])
@@ -88,7 +88,7 @@ for eps in range(0,stcounter_max+1):
           muwatertoplot.append(muwater[i])
 
       
-      filename_data=f'datatotal.eps{st:.2f}.chi{chi:.2f}.dat'
+      filename_data=f'datatotal.eps{st:.2f}.chi{chi:.5f}.dat'
       with open(filename_data, 'w', newline='') as file:
         writer=csv.writer(file,delimiter=' ')
         writer.writerow(['#','rho','volfrac','mu','F','p','molarvol'])
@@ -208,14 +208,14 @@ for eps in range(0,stcounter_max+1):
       
       plt.figure(1) 
     #  plt.scatter(molarvolumetoplot,pressuretoplot,s=5,label=f'eps = {st:.2f}')
-      plt.plot(molarvolume,pV_final_toplot,lw=1,label=f'eps = {st:.2f} chi = {chi:.2f}') 
+      plt.plot(molarvolume,pV_final_toplot,lw=1,label=f'eps = {st:.2f} chi = {chi:.5f}') 
     #  plt.scatter(V_limits,p_limits,color='black',marker='x')
       plt.scatter(V_limits_frommu,p_limits_frommu,color='black',marker='s',facecolors='none',edgecolors='black',lw=1)
       if len(mu_limits) == 2:
          plt.scatter([V_eq_frommu[0],V_eq_frommu[2]],[pvap_eq_frommu[0],pvap_eq_frommu[0]],s=15,marker='o',facecolors='none',edgecolors='black',lw=1)
 
       plt.figure(2)
-      plt.plot(rho,mudens_fit,lw=1,label=f'eps = {st:.2f} chi = {chi:.2f}')
+      plt.plot(rho,mudens_fit,lw=1,label=f'eps = {st:.2f} chi = {chi:.5f}')
     #  plt.scatter(volfractiontoplot,muwatertoplot,s=5,label=f'eps = {st:.2f}')
       plt.scatter(rho_limits,mu_limits,color='black',marker='x')
       if len(mu_limits) == 2:
@@ -228,7 +228,7 @@ for eps in range(0,stcounter_max+1):
         Vol_towrite=1/rho_towrite
         p_towrite=pV_interp(Vol_towrite)
 
-        filename_mup=f'data.eps{st:.2f}.chi{chi:.2f}.dat'
+        filename_mup=f'data.eps{st:.2f}.chi{chi:.5f}.dat'
         with open(filename_mup, 'w', newline='') as file:
           writer=csv.writer(file,delimiter=' ')
           writer.writerow(['#','V','p','mu','(gas','phase)'])
@@ -244,6 +244,7 @@ for eps in range(0,stcounter_max+1):
 # print(V_spinodal)
 # print(p_spinodal)
 
+'''
 binodal=CS(V_binodal,p_binodal)
 spinodal=CS(V_spinodal,p_spinodal)
 logVbin=np.linspace(np.log(V_eq_frommu[2]),np.log(V_eq_frommu[0]),200)
@@ -264,10 +265,11 @@ Vspin=np.exp(logVspin)
 #      index.append([i,j1,j])
 
 #print(index)
+'''
 
 plt.figure(1)
-plt.plot(Vbin,spinodal(Vbin),linestyle='--',color='blue')
-plt.plot(Vbin,binodal(Vbin),linestyle='--',color='red')
+# plt.plot(Vbin,spinodal(Vbin),linestyle='--',color='blue')
+# plt.plot(Vbin,binodal(Vbin),linestyle='--',color='red')
 plt.xscale('log')
 plt.yscale('log')
 plt.xlabel('$Volume\ /\ nm^3molecule^{-1}$')
