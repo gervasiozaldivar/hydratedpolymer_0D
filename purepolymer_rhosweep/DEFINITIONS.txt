@@ -1,0 +1,11 @@
+npoorsv=2
+n=2
+n0=236
+n1=2596
+vol=0.0155
+lseg=0.277
+Kas=156.
+permittivity=3.
+rhomin=0.0001
+rhomax=0.015
+rhostep=0.0001

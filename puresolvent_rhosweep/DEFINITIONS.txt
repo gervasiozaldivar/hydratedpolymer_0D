@@ -1,0 +1,8 @@
+vol=0.04
+lseg=0.43
+stmin=3.
+stmax=7.
+ststep=.25
+rhomin=-7.
+rhomax=1.2
+rhostep=0.001

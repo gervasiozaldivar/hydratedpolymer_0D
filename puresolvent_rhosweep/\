@@ -1,0 +1,124 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.interpolate import CubicSpline as CS
+
+file_path = 'DEFINITIONS.txt'
+
+data = {}
+with open(file_path, 'r') as file:
+    for line in file:
+        key, value = line.strip().split('=')
+        data[key] = float(value)
+
+print(data)
+
+vol=data['vol']
+lseg=data['lseg']
+stmin=data['stmin']
+stmax=data['stmax']
+ststep=data['ststep']
+rhomin=data['rhomin']
+rhomax=data['rhomax']
+rhostep=data['rhostep']
+
+counter_max=int((rhomax-rhomin)/rhostep)
+stcounter_max=int((stmax-stmin)/ststep)
+
+st=stmin
+
+
+gtot=-2.0**1.5/3.0*np.pi*lseg**3
+
+for eps in range(0,stcounter_max+1):
+    
+  logrho=rhomin 
+  volfraction=[]
+  muwater=[]
+  S_mix=[]
+  F_HS=[]
+  F_tot=[]
+  F_vdw=[]
+  pressure=[]
+  molarvolume=[]
+  molarvolumetoplot=[]
+  pressuretoplot=[]
+  volfractiontoplot=[]
+  muwatertoplot=[]
+
+  print('Solving eps = ')
+  print(st)
+
+  for i in range(0, counter_max+1):
+    rho=10.**logrho
+    volfraction.append(rho*vol)
+    logvolfraction=np.log(volfraction[i])
+    uvdw=rho*st*gtot
+    uHS=(8.0*volfraction[i]-9.0*volfraction[i]**2.0+3.0*volfraction[i]**3.)/(1.-volfraction[i])**3.
+    muwater.append(logvolfraction + uvdw + uHS)
+    S_mix.append(rho*(logvolfraction-1.0))
+    F_vdw.append(uvdw*rho/2.0)
+    F_HS.append(rho*volfraction[i]*(4.0-3.0*volfraction[i])/(1-volfraction[i])**2.0)
+    F_tot.append(S_mix[i] + F_vdw[i] + F_HS[i] - rho*muwater[i])
+    pressure.insert(0,-F_tot[i])
+    molarvolume.insert(0,1./volfraction[i])
+    logrho=logrho+rhostep
+    if i/10 == i//10:
+      molarvolumetoplot.insert(0,1./volfraction[i])
+      pressuretoplot.insert(0,-F_tot[i])
+      volfractiontoplot.append(volfraction[i])
+      muwatertoplot.append(muwater[i])
+
+  pV_interp=CS(molarvolume,pressure)
+  mudens_interp=CS(volfraction,muwater)
+
+  pV_fit=pV_interp(molarvolume)
+  mudens_fit=mudens_interp(volfraction)
+
+  deriv_pV=pV_interp.derivative()
+  V_limits=deriv_pV.roots()
+  p_limits=pV_interp(V_limits)
+
+  if len(p_limits) == 2:
+     p0_step=(p_limits[1]-p_limits[1])/100
+     p0=p_limits[0]+p0_step
+     
+     for i in range(1,100):
+       pV_corr=pV_interp-p0
+
+  plt.figure(1) 
+  plt.scatter(molarvolumetoplot,pressuretoplot,s=5,label=f'eps = {st:.2f}')
+  plt.plot(molarvolume,pV_fit,color=(0.2,0.2,0.2),lw=0.75) 
+  plt.scatter(V_limits,p_limits,color='black',marker='x')
+  plt.figure(2)
+  plt.plot(volfraction,mudens_fit)
+  plt.scatter(volfractiontoplot,muwatertoplot,s=5,label=f'eps = {st:.2f}')
+
+  st=st+ststep
+
+
+#index=[]
+#for i in range(0,counter_max+1):
+#  for j in range(i,counter_max+1):
+#    diff=pressure[i]-pressure[j]
+#    if pressure[j] == pressure[i]:
+#      j1 = j
+#      continue
+#  for j in range(j,counter_max+1):
+#    if pressure[j] == pressure[j1]:
+#      index.append([i,j1,j])
+
+#print(index)
+
+plt.figure(1)
+plt.xscale('log')
+plt.yscale('log')
+plt.xlabel('$Volume\ /\ nm^3molecule^{-1}$')
+plt.ylabel('$Pressure$')
+plt.legend()
+plt.figure(2)
+plt.xlabel(r'$\rho\ /\ molecules\ nm^{-3}$')
+plt.ylabel(r'$\mu_{water}$')
+plt.legend()
+plt.show()
+
+
