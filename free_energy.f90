@@ -8,7 +8,7 @@ implicit none
 integer i,j
 real*8 F_1, F_2
 real*8 F_mixs, F_mixpol, F_mixCl, F_mix
-real*8 F_HS
+real*8 F_HS, F_chi
 real*8 F_chem
 real*8 F_vdw(2+Npoorsv,Npoorsv+2),Fvdw_tot
 real*8 F_born
@@ -30,6 +30,7 @@ if (flagreservoir.eq.1) then
   open(unit=310,file='F_tot_noreservoir.dat') ! total semi-grand canonical potential per molecule
   open(unit=311,file='F_reservoir.dat') ! canonical potential density of water reservoir (-pressure)
   open(unit=312,file='F_born.dat')
+  open(unit=313,file='F_chi.dat') 
 
   do i=1,2+Npoorsv
   do j=1,2+Npoorsv
@@ -56,6 +57,7 @@ Fvdw_tot = 0.0
 F_HS = 0.0
 F_chem = 0.0
 F_born = 0.0
+F_chi = 0.0
 
 if (flagreservoir.eq.0) then
   F_reservoir=0.0
@@ -65,6 +67,7 @@ if (flagreservoir.eq.0) then
   Nmuwater_reservoir=0.0
   Fborn_reservoir=0.0
   rhosol_reservoir=volumefraction(1)/vol
+  F_chi_reservoir=0.0
 endif
 
 !! F_mix !!
@@ -96,6 +99,13 @@ Fvdw_tot = Fvdw_tot-F_vdw_reservoir
 if (flagreservoir.eq.0)F_vdw_reservoir=Fvdw_tot
 
 ! print*,"Fvdw is ", Fvdw_tot/rho_pol
+
+!! F_chi !!
+
+F_chi = chi * volumefraction(1)**3. / 3. 
+F_chi = F_chi / vol**3.
+F_chi = F_chi - F_chi_reservoir
+if (flagreservoir.eq.0)F_chi_reservoir = F_chi
 
 !! F_HS !!
 
@@ -162,6 +172,10 @@ F_2 = F_2 + F_born + Fborn_reservoir
 !! number densities !!
 
 F_2 = F_2 - rho_pol - freeClvolumefraction/vol - volumefraction(1)/vol
+
+!! virial !!
+
+F_2 = F_2 - 2./3. * chi * volumefraction(1)**3./vol**3.
 
 
 F_2 = F_2 - F_reservoir

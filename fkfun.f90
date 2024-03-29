@@ -7,7 +7,7 @@ implicit none
 integer*8 j,i !indices
 integer ier
 real*8 f(2), x(2)      ! x(1:ntot)=volumefraction(i)  
-real*8 u_HS, u_vdw(Npoorsv+2)
+real*8 u_HS, u_vdw(Npoorsv+2), u_chi
 real*8 volumefractionwater
 real*8 algo 
 
@@ -58,6 +58,11 @@ enddo
 
 u_vdw(:)=u_vdw(:)/vol
 
+! u_chi : third virial term
+
+u_chi = chi * volumefraction(1)**2 
+u_chi = u_chi / vol**2
+
 ! u_self : born potential
 
 u_self = 2*u_born
@@ -69,6 +74,7 @@ volumefractionwater = exp(muwater) ! chemical potential
 volumefractionwater = volumefractionwater*exp(-Xu*u_vdw(1)) ! van der waals interactions
 volumefractionwater = volumefractionwater*exp(-u_HS) ! hard spheres interactions
 volumefractionwater = volumefractionwater*exp(-u_self*(perm_water/perm-1.))
+volumefractionwater = volumefractionwater*exp(-u_chi)
 
 !! calculation of mupol !!
 

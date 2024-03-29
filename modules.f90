@@ -9,6 +9,7 @@ module mfkfun
 implicit none
 real*8 vol,lseg !st(2+Npoorsv,2+Npoorsv) ! molecularproperties
 real*8,allocatable :: st(:,:)
+real*8 chi
 integer*8 Xulimit ! vdw integration
 integer*8 ntail,nion,Npoorsv
 integer*8,allocatable :: n(:),n_read(:)
@@ -27,4 +28,5 @@ endmodule mfkfun
 
 module Reservoir
 real*8 F_reservoir, F_mix_reservoir, F_vdw_reservoir, F_HS_reservoir, Nmuwater_reservoir,rhosol_reservoir, Fborn_reservoir
+real*8 F_chi_reservoir
 endmodule

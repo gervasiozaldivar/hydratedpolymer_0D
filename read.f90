@@ -29,6 +29,9 @@ read(8,*) nada
 read(8,*) lseg
 
 read(8,*) nada
+read(8,*) chi
+
+read(8,*) nada
 read(8,*) muwater_min, muwater_max, muwater_step
 
 read(8,*) nada
