@@ -38,7 +38,7 @@ read(8,*) nada
 read(8,*) Kas 
 
 read(8,*) nada
-read(8,*) perm_pol
+read(8,*) perm_pol, perm_water
 
 read(8,*) nada
 read(8,*) infile

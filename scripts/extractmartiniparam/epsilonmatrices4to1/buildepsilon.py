@@ -1,12 +1,11 @@
 '''
-This script prepares the epsilon file for a group of atom martini beads.
+This script prepares the epsilon file for a group of 4to1 martini beads.
 Example: 
 python buildepsilon.py W Q1 Q1 C1 X2 C1Q1Q1 
 
 In the example the last argument is the name of the epsilon file and the rest of the arguments
 are the selected beads to build the epsilon matrix.
 '''
-
 
 
 import sys
@@ -24,7 +23,7 @@ filename="epsilon"+sys.argv[-1]+".dat"
 
 epsilonmtrx = np.zeros((len(beads),len(beads)))
 
-with open("../epsilon_list.dat","r") as eps_list:
+with open("../epsilon_list_4to1.dat","r") as eps_list:
     
     eps_dict={}
     

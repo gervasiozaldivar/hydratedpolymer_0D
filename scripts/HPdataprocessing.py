@@ -4,6 +4,7 @@ import os
 
 
 # for i in 
+CGtoAA = 4
 IEC_list=[100,85,75]
 RH_list=["01","05","15","25","35","45","55","65","75","85","95","99"]
 MW_list=[96.9,14,79.9]
@@ -74,7 +75,7 @@ for IEC in IEC_list:
     phi_total = data[5]
     phi_polymer = rhopol*(sum(n)+n[0])*volume
    
-    n_water = phi_water/volume
+    n_water = CGtoAA * phi_water/volume
     n_ion = phi_ion/volume
     lambdaratio = n_water/n_ion
     polymerconc = rhopol*1e24/6.02e23 # units of moil/L

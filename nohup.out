@@ -1,0 +1,16 @@
+At line 10 of file read.f90 (unit = 8, file = 'fort.8')
+Fortran runtime error: End of file
+
+Error termination. Backtrace:
+#0  0x7fa6c5223960 in ???
+#1  0x7fa6c52244d9 in ???
+#2  0x7fa6c522510f in ???
+#3  0x7fa6c547817b in ???
+#4  0x7fa6c5471684 in ???
+#5  0x7fa6c54722aa in ???
+#6  0x564655ca317e in readinput_
+	at /home/gervasio-lab/develop/hydratedpolymer_0D/read.f90:10
+#7  0x564655c9b6de in elctrolyte
+	at /home/gervasio-lab/develop/hydratedpolymer_0D/main.f90:17
+#8  0x564655c9d729 in main
+	at /home/gervasio-lab/develop/hydratedpolymer_0D/main.f90:3
