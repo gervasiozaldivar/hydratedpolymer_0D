@@ -31,6 +31,7 @@ if (flagreservoir.eq.1) then
   open(unit=311,file='F_reservoir.dat') ! canonical potential density of water reservoir (-pressure)
   open(unit=312,file='F_born.dat')
   open(unit=313,file='F_chi.dat') 
+  open(unit=314,file='F_muwater.dat')
 
   do i=1,2+Npoorsv
   do j=1,2+Npoorsv
@@ -204,7 +205,7 @@ else
   write(310,*)rho_pol,muwater,(F_1+F_reservoir)/rho_pol
   write(311,*)rho_pol,muwater,rhosol_reservoir,F_reservoir
   write(312,*)rho_pol,muwater,F_born/rho_pol
-
+  write(314,*)rho_pol,muwater,(-muwater*volumefraction(1)/vol + Nmuwater_reservoir) / rho_pol
   do i = 1,Npoorsv+2
   do j = 1,Npoorsv+2
     write(10000*i+j,*)rho_pol,muwater,F_vdw(i,j)/rho_pol

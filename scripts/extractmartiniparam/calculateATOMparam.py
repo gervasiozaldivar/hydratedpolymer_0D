@@ -2,7 +2,7 @@ import numpy as np
 
 
 
-beads=["W", "C5", "C4", "C3", "C2", "C1", "X2", "Q5", "Q4", "Q3", "Q2", "Q1"]
+beads=["W","P4", "N4", "C5", "C4", "C3", "C2", "C1", "X2", "Q5", "Q4", "Q3", "Q2", "Q1"]
 
 sigma_ref=np.array([0.47,0.41,0.34])
 

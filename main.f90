@@ -52,6 +52,8 @@ do while (mucounter.le.mucounter_max)
   iter=0
 !  chargefraction=0.
 
+  open(unit=986,file="rhosol_reservoir.dat")
+
   print*,"Solving water reservoir for muwater = ", muwater,". Initial guess is ",inputwater
 
   rho_pol = 0.
@@ -64,7 +66,8 @@ do while (mucounter.le.mucounter_max)
   call free_energy
 
   print*,"Water reservoir solved"
-
+  write(986,*)volumefraction(1)/vol
+  close(986)
   flagreservoir=1
 
   x_init(1) = 0.1 ! default water volume fraction initial guess

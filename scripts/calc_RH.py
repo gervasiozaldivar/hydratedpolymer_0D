@@ -1,8 +1,18 @@
+'''
+Calculates mu water vs %RH
+Example:
+python calc_RH.py data.3.09.dat
+'''
+
 import numpy as np
 from scipy.interpolate import CubicSpline
 import matplotlib.pyplot as plt
+import sys
 
-filename="data.11.43.dat"
+
+
+filename=sys.argv[1]
+
 data=np.loadtxt(filename)
 
 filetowrite=open("mu_vs_RH.dat","w")

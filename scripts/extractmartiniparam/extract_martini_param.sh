@@ -1,6 +1,6 @@
 #!/bin/bash
 
-beads=("W" "C5" "C4" "C3" "C2" "C1" "X2" "Q5" "Q4" "Q3" "Q2" "Q1")
+beads=("W" "P4" "N4" "C5" "C4" "C3" "C2" "C1" "X2" "Q5" "Q4" "Q3" "Q2" "Q1")
 
 beadnumber=${#beads[@]}
 
